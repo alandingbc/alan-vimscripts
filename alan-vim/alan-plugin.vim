@@ -25,6 +25,7 @@ Plugin 'ShowTrailingWhitespace'
 " Plugin 'honza/vim-snippets'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'Valloric/ListToggle'
+Plugin 'vim-scripts/SrcExpl'
 
 " Color schemes
 Plugin 'antlypls/vim-colors-codeschool'
@@ -60,12 +61,12 @@ colorscheme codeschool
 " -----  Tagbar  -----  [- Inused -]
 
 " set tags= "ctags database path changed to owner's path
-set tags=tags
+" set tags=tags
 if filereadable("tags")
-	set tags=./tags
+	set tags+=./tags
 endif
 let g:tagbar_ctags_bin = '/usr/bin/ctags'
-let g:tagbar_width = 40
+let g:tagbar_width = 30
 let g:tagbar_left = 1
 nmap <F7> :TagbarToggle<CR>
 
@@ -86,7 +87,7 @@ nmap <F7> :TagbarToggle<CR>
 " -----  NERDTree  -----  [- Inused -]
 
 let g:NERDTreeWinPos="right"
-let g:NERDTreeWinSize=40
+let g:NERDTreeWinSize=30
 let g:NERDTreeShowLineNumbers=1
 let g:NERDTreeQuitOnOpen=1
 nmap <F9> :NERDTreeToggle<CR>
@@ -101,7 +102,7 @@ if has("cscope")
 	set nocsverb                    "verbose off
 	" add any database in current directory
 	if filereadable("cscope.out")
-		cs add cscope.out
+		cs add ./cscope.out
 		" else add database pointed to by environment
 	else
 		cs add /work/source-code/torvalds_linux_kernel/cscope.out \
@@ -117,8 +118,8 @@ endif
 
 let Tlist_Show_One_File=0
 
-" map g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
-" map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
+map g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
+map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
 nmap <leader>sa :cs add cscope.out<CR>
 " s: Find this C symbol
@@ -263,3 +264,39 @@ if !exists('g:airline_symbols')
 else
     let g:airline_symbols = "\ua0"
 endif
+
+
+" -----  SrcExpl ----- [- Inused -]
+" // The switch of the Source Explorer
+nmap <F8> :SrcExplToggle<CR>
+" // Set the height of Source Explorer window
+let g:SrcExpl_winHeight = 10
+" // Set 100 ms for refreshing the Source Explorer
+let g:SrcExpl_refreshTime = 100
+" // Set "Enter" key to jump into the exact definition context
+let g:SrcExpl_jumpKey = "<ENTER>"
+" // Set "Space" key for back from the definition context
+let g:SrcExpl_gobackKey = "<SPACE>"
+" // In order to avoid conflicts, the Source Explorer should know what plugins
+" // except itself are using buffers. And you need add their buffer names into
+" // below listaccording to the command ":buffers!"
+let g:SrcExpl_pluginList = [
+        \ "__tagbar__",
+        \ "_NERD_tree_",
+        \ "Source_Explorer",
+    \ ]
+" // Enable/Disable the local definition searching, and note that this is not
+" // guaranteed to work, the Source Explorer doesn't check the syntax for now.
+" // It only searches for a match with the keyword according to command 'gd'
+let g:SrcExpl_searchLocalDef = 1
+" // Do not let the Source Explorer update the tags file when opening
+let g:SrcExpl_isUpdateTags = 0
+" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to
+" // create/update the tags file
+let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
+" // Set "<F12>" key for updating the tags file artificially
+let g:SrcExpl_updateTagsKey = "<F12>"
+" // Set "<F3>" key for displaying the previous definition in the jump list
+let g:SrcExpl_prevDefKey = "<F3>"
+" // Set "<F4>" key for displaying the next definition in the jump list
+let g:SrcExpl_nextDefKey = "<F4>"
