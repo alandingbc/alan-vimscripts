@@ -19,6 +19,7 @@ set autowrite
 set nobackup
 set noswapfile
 set confirm " Remind when handle unsaved or only-read file.
+" set hidden
 
 " Hidden toolbar and so forth.
 set guioptions-=T   " Hidden tool bar.
@@ -44,11 +45,11 @@ set ignorecase	    " Ignore case (case unsensitive).
 set autoindent
 set smartindent
 set cindent         " C language auto indent.
-set cinkeys=0{,0},0),:,0#,!^F,o,O, " Default setting.
+" set cinkeys=0{,0},0),:,0#,!^F,o,O, " Default setting.
 " set cinkeys=0{,0},0),:,0#,!^F,!<Tab>, " Default setting.
 " set cinkeys=0{,0},:,0#,!<Tab>,!^F " Recommend setting.
-set cinoptions=>s,e0,n0,f0,{0,}0,^0,L-1,:s,=s,l0,b0,gs,hs,N0,ps,ts,is,+0,
-            \c3,C0,/0,(1s,us,U0,w0,W0,k0,m0,j0,J0,)20,*70,#0
+" set cinoptions=>s,e0,n0,f0,{0,}0,^0,L-1,:s,=s,l0,b0,gs,hs,N0,ps,ts,is,+0,
+            " \c3,C0,/0,(1s,us,U0,w0,W0,k0,m0,j0,J0,)20,*70,#0
 set backspace=indent,eol,start
 set smarttab	    " a <TAB> insert shiftwidth position.
 set tabstop=4	    " a <TAB> takes tabstop width space.

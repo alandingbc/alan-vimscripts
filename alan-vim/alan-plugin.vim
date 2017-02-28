@@ -1,5 +1,4 @@
-" | ================  Vundle Configuration ================ |
-
+" | ================  Vundle Configuration ================ | 
 filetype off	" required
 
 " set the runtime path to include Vundle and initialize
@@ -19,13 +18,13 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'rdnetto/YCM-Generator'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'DeleteTrailingWhitespace'
-Plugin 'ShowTrailingWhitespace'
+" Plugin 'DeleteTrailingWhitespace'
+" Plugin 'ShowTrailingWhitespace'
 " Plugin 'Siver/ultisnips'
 " Plugin 'honza/vim-snippets'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'Valloric/ListToggle'
-Plugin 'vim-scripts/SrcExpl'
+Plugin 'wesleyche/SrcExpl'
 
 " Color schemes
 Plugin 'antlypls/vim-colors-codeschool'
@@ -58,13 +57,17 @@ colorscheme codeschool
 
 " | ===============  PLUGIN SETTING  ============== |
 
+" set tags= "ctags database path changed to owner's path
+set tags=tags
+if filereadable("tags")
+    set tags+=./tags
+elseif filereadable("/home/alan/github/linux-torvald-linus/tags")
+    set tag+=/home/alan/github/linux-torvald-linus/tags
+endif
+
+
 " -----  Tagbar  -----  [- Inused -]
 
-" set tags= "ctags database path changed to owner's path
-" set tags=tags
-if filereadable("tags")
-	set tags+=./tags
-endif
 let g:tagbar_ctags_bin = '/usr/bin/ctags'
 let g:tagbar_width = 30
 let g:tagbar_left = 1
@@ -96,18 +99,18 @@ nmap <F9> :NERDTreeToggle<CR>
 " -----  Cscope  -----  [- Inused -]
 
 if has("cscope")
-	set csprg=/usr/bin/cscope       "cscope path
-	set csto=0                      "cscope DB search first
-	set cst                         "cscope DB tag DB search
-	set nocsverb                    "verbose off
-	" add any database in current directory
-	if filereadable("cscope.out")
-		cs add ./cscope.out
-		" else add database pointed to by environment
-	else
-		cs add /work/source-code/torvalds_linux_kernel/cscope.out \
-	endif
-	set csverb						"verbose on
+    set csprg=/usr/bin/cscope       "cscope path
+    set csto=0                      "cscope DB search first
+    set cst                         "cscope DB tag DB search
+    set nocsverb                    "verbose off
+    " add any database in current directory
+    if filereadable("cscope.out")
+        cs add ./cscope.out
+        " else add database pointed to by environment
+    else
+        cs add /work/source-code/torvalds_linux_kernel/cscope.out \
+    endif
+    set csverb						"verbose on
 endif
 
 " let g:cscope_open_location = 0
@@ -118,8 +121,8 @@ endif
 
 let Tlist_Show_One_File=0
 
-map g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
-map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
+" map g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
+" map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
 nmap <leader>sa :cs add cscope.out<CR>
 " s: Find this C symbol
@@ -142,14 +145,14 @@ nnoremap  <leader>si :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 " Using 'CTRL-spacebar' then a search type makes the vim window
 " split horizontally, with search result displayed in
 " the new window.
-nmap <C-Space>s :scs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-Space>g :scs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-Space>c :scs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-Space>t :scs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-Space>e :scs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-Space>f :scs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-Space>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <C-Space>d :scs find d <C-R>=expand("<cword>")<CR><CR>
+" nmap <C-Space>s :scs find s <C-R>=expand("<cword>")<CR><CR>
+" nmap <C-Space>g :scs find g <C-R>=expand("<cword>")<CR><CR>
+" nmap <C-Space>c :scs find c <C-R>=expand("<cword>")<CR><CR>
+" nmap <C-Space>t :scs find t <C-R>=expand("<cword>")<CR><CR>
+" nmap <C-Space>e :scs find e <C-R>=expand("<cword>")<CR><CR>
+" nmap <C-Space>f :scs find f <C-R>=expand("<cfile>")<CR><CR>
+" nmap <C-Space>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+" nmap <C-Space>d :scs find d <C-R>=expand("<cword>")<CR><CR>
 
 " -----  IndentLine -----  [- Unused -]
 
@@ -159,7 +162,8 @@ let g:indentLine_indentLevel = 3    " only show 2 indent line enough.
 let g:indentLine_color_term = 248
 let g:indentLine_color_tty_light = 4    " default 4
 let g:indentLine_color_tty_dark = 2     " default 2
-let g:indentLine_fileTypeExclude = ['text', 'sh']
+let g:indentLine_fileType = ['c', 'cpp', 'sh']
+let g:indentLine_fileTypeExclude = ['text']
 nnoremap <leader>ie :IndentLinesEnable<CR>
 nnoremap <leader>id :IndentLinesDisable<CR>
 nnoremap <leader>il :IndentLinesToggle<CR>
@@ -170,9 +174,9 @@ nnoremap <leader>il :IndentLinesToggle<CR>
 set completeopt=longest,menu
 autocmd InsertLeave * if pumvisible() == 0 |pclose|endif
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-" let g:ycm_global_ycm_extra_conf = '/home/alan/.vim/bundle/YouCompleteMe/
-" \third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-let g:ycm_global_ycm_extra_conf = '/home/alan/.ycm_confirm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '/home/alan/.vim/bundle/YouCompleteMe/
+            \third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+" let g:ycm_global_ycm_extra_conf = '/home/alan/.ycm_confirm_extra_conf.py'
 let g:ycm_show_diagnostics_ui = 1 " 0 Disable Syntastic
 let g:ycm_enable_diagnostic_signs = 1
 let g:ycm_enable_diagnostic_highlighting = 1
@@ -239,31 +243,70 @@ let NERDSpaceDelims = 1 " Add white space before left & after right commenter.
 
 
 " -----  DeleteTrailingWhitespace ----- [- Inused -]
-let g:DeleteTrailingWhitespace = 1
-let g:DeleteTrailingWhitespace_Action = 'delete'
+" let g:DeleteTrailingWhitespace = 1
+" let g:DeleteTrailingWhitespace_Action = 'delete'
 
 
 " -----  Airline ----- [- Inused -]
 
 let g:airline_theme='molokai'
 let g:airline_powerline_fonts = 1
-" Turn off/on Airline
-" nnoremap <leader>al :AirlineToggle<CR>
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#buffer_nr_show = 1
-
-let g:airline#extensions#tabline#whitespace#enable = 0
-let g:airline#extensions#tabline#whitespace#symbol = '!'
-
-nnoremap <TAB> :bn<CR>
-nnoremap <leader>bn :bn<CR>
-nnoremap <leader>bp :bp<CR>
 
 if !exists('g:airline_symbols')
-	let g:airline_symbols = {}
+    let g:airline_symbols = {}
 else
     let g:airline_symbols = "\ua0"
 endif
+
+" Airline Command
+" Turn off/on Airline
+nnoremap <leader>al :AirlineToggle<CR>
+" AirlineTheme
+" AirlineToggleWhitespace
+" AirlineRefresh
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+let g:airline#extensions#tabline#whitespace#enable = 1
+let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing', 'long', 'mixed-indent-file' ]
+let g:airline#extensions#tabline#whitespace#symbol = '!'
+let airline#extensions#c_like_langs = ['c', 'cpp', 'cuda', 'go', 'javascript', 'ld', 'php']
+
+" Switch buffers
+noremap <TAB> :bn<CR>
+noremap <leader>bn :bn<CR>
+noremap <leader>bp :bp<CR>
+" Delete current buffer
+noremap <leader>bd :bd<CR>
+
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>- <Plug>AirlineSelectPrevTab
+nmap <leader>+ <Plug>AirlineSelectNextTab
+
+let g:airline#extensions#tabline#buffer_idx_format = {
+            \ '0': '0 ',
+            \ '1': '1 ',
+            \ '2': '2 ',
+            \ '3': '3 ',
+            \ '4': '4 ',
+            \ '5': '5 ',
+            \ '6': '6 ',
+            \ '7': '7 ',
+            \ '8': '8 ',
+            \ '9': '9 '
+            \}
+
 
 
 " -----  SrcExpl ----- [- Inused -]
@@ -281,10 +324,10 @@ let g:SrcExpl_gobackKey = "<SPACE>"
 " // except itself are using buffers. And you need add their buffer names into
 " // below listaccording to the command ":buffers!"
 let g:SrcExpl_pluginList = [
-        \ "__tagbar__",
-        \ "_NERD_tree_",
-        \ "Source_Explorer",
-    \ ]
+            \ "tagbar",
+            \ "Tagbar",
+            \ "_NERD_tree_",
+            \ ]
 " // Enable/Disable the local definition searching, and note that this is not
 " // guaranteed to work, the Source Explorer doesn't check the syntax for now.
 " // It only searches for a match with the keyword according to command 'gd'
